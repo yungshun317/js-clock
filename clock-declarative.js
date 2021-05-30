@@ -35,3 +35,33 @@ const prependZero = key => clockTime => ({
 	...clockTime,
 	key: clockTime[key] < 10 ? "0" + clockTime[key] : clockTime[key]
 });
+
+// [4] Compose all the functions to build the ticking clock
+const convertToCivilianTime = clockTime =>
+    compose(
+    	appendAMPM,
+    	civilianHours
+    )(clockTime);
+
+const doubleDigits = civilianTime =>
+    compose(
+    	prependZero("hours"),
+    	prependZero("minutes"),
+    	prependZero("seconds")
+    )(civilianTime);
+
+const startTicking = () =>
+    setInterval(
+    	compose(
+    		clear,
+    		getCurrentTime,
+    		serializeClockTime,
+    		convertToCivilianTime,
+    		doubleDigits,
+    		formatClock("hh:mm:ss tt"),
+    		display(log)
+    	),
+    	oneSecond()
+    );
+
+startTicking();
