@@ -18,7 +18,7 @@ const civilianHours = clockTime => ({
 
 const appendAMPM = clockTime => ({
 	...clockTime,
-	ampm: clockTime > 12 ? "PM" : "AM"
+	ampm: clockTime.hours > 12 ? "PM" : "AM"
 });
 
 // [3] Higher-order functions for creating functions
@@ -33,8 +33,11 @@ const formatClock = format => time =>
 
 const prependZero = key => clockTime => ({
 	...clockTime,
-	key: clockTime[key] < 10 ? "0" + clockTime[key] : clockTime[key]
+	[key]: clockTime[key] < 10 ? "0" + clockTime[key] : clockTime[key]
 });
+
+// [5] Implement the "compose" function
+const compose = (...fns) => (arg) => fns.reduce((composed, f) => f(composed), arg);
 
 // [4] Compose all the functions to build the ticking clock
 const convertToCivilianTime = clockTime =>
@@ -53,7 +56,6 @@ const doubleDigits = civilianTime =>
 const startTicking = () =>
     setInterval(
     	compose(
-    		clear,
     		getCurrentTime,
     		serializeClockTime,
     		convertToCivilianTime,
