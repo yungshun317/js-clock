@@ -56,6 +56,7 @@ const doubleDigits = civilianTime =>
 const startTicking = () =>
     setInterval(
     	compose(
+    		clear,
     		getCurrentTime,
     		serializeClockTime,
     		convertToCivilianTime,
